@@ -164,43 +164,41 @@ export const App: React.FC = () => {
     }, 300);
   };
 
-  const handleClearCompleted = () => {
-    const completedIds = todos
-      .filter(todo => todo.completed)
-      .map(todo => todo.id);
+  const handleClearCompleted = async () => {
+  const completedTodos = todos.filter(todo => todo.completed);
 
-    if (completedIds.length === 0) {
-      return;
-    }
+  if (completedTodos.length === 0) return;
 
-    setLoadingIds(prev => [...prev, ...completedIds]);
-    focusAfterOperation.current = true;
+  const completedIds = completedTodos.map(todo => todo.id);
+  setLoadingIds(prev => [...prev, ...completedIds]);
 
-    let completedCount = 0;
+  const promises = completedIds.map(id =>
+    deleteTodo(id)
+      .then(() => ({ id, status: 'fulfilled' }))
+      .catch(() => ({ id, status: 'rejected' }))
+  );
 
-    completedIds.forEach(id => {
-      deleteTodo(id)
-        .then(() => {
-          setTodos(prev => prev.filter(todo => todo.id !== id));
-          completedCount++;
+  const results = await Promise.all(promises);
 
-          if (completedCount === completedIds.length) {
-            focusAfterOperation.current = true;
-          }
-        })
-        .catch(() => {
-          showError(ErrorMessage.Delete);
-          completedCount++;
+  const successfulIds = results
+    .filter(result => result.status === 'fulfilled')
+    .map(result => result.id);
 
-          if (completedCount === completedIds.length) {
-            focusAfterOperation.current = true;
-          }
-        })
-        .finally(() => {
-          setLoadingIds(prev => prev.filter(todoId => todoId !== id));
-        });
-    });
-  };
+  const failedIds = results
+    .filter(result => result.status === 'rejected')
+    .map(result => result.id);
+
+  if (successfulIds.length > 0) {
+    setTodos(prev => prev.filter(todo => !successfulIds.includes(todo.id)));
+  }
+
+  if (failedIds.length > 0) {
+    showError(ErrorMessage.Delete);
+  }
+
+  focusAfterOperation.current = true;
+  setLoadingIds(prev => prev.filter(id => !completedIds.includes(id)));
+};
 
   useEffect(() => {
     if (!USER_ID) {
