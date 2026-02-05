@@ -32,7 +32,7 @@ export const Header: React.FC<HeaderProps> = ({
     )}
 
     <form
-      onSubmit={(e) => {
+      onSubmit={e => {
         e.preventDefault();
         onSubmit();
       }}
@@ -43,7 +43,7 @@ export const Header: React.FC<HeaderProps> = ({
         className="todoapp__new-todo"
         placeholder="What needs to be done?"
         value={title}
-        onChange={(e) => onTitleChange(e.target.value)}
+        onChange={e => onTitleChange(e.target.value)}
         disabled={isDisabled}
         autoFocus
       />

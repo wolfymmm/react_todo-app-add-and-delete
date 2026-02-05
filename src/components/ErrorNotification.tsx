@@ -10,14 +10,14 @@ interface ErrorNotificationProps {
 export const ErrorNotification: React.FC<ErrorNotificationProps> = ({
   message,
   isHidden,
-  onClose
+  onClose,
 }) => {
   return (
     <div
       data-cy="ErrorNotification"
       className={classNames(
         'notification is-danger is-light has-text-weight-normal',
-        { hidden: isHidden }
+        { hidden: isHidden },
       )}
     >
       <button

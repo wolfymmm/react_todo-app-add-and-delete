@@ -8,7 +8,12 @@ interface TodoListProps {
   onToggle?: (id: number, completed: boolean) => void;
 }
 
-export const TodoList: React.FC<TodoListProps> = ({ todos, loadingIds, onDelete, onToggle }) => {
+export const TodoList: React.FC<TodoListProps> = ({
+  todos,
+  loadingIds,
+  onDelete,
+  onToggle,
+}) => {
   return (
     <ul className="todo-list">
       {todos.map(todo => (

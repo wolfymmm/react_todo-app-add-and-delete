@@ -11,7 +11,11 @@ export const Filter: React.FC<FilterProps> = ({ filter, onFilterChange }) => {
   const links = [
     { type: FILTERS.all, label: 'All', dataCy: 'FilterLinkAll' },
     { type: FILTERS.active, label: 'Active', dataCy: 'FilterLinkActive' },
-    { type: FILTERS.completed, label: 'Completed', dataCy: 'FilterLinkCompleted' },
+    {
+      type: FILTERS.completed,
+      label: 'Completed',
+      dataCy: 'FilterLinkCompleted',
+    },
   ];
 
   return (
@@ -21,8 +25,10 @@ export const Filter: React.FC<FilterProps> = ({ filter, onFilterChange }) => {
           key={link.type}
           href="#/"
           data-cy={link.dataCy}
-          className={classNames('filter__link', { selected: filter === link.type })}
-          onClick={(e) => {
+          className={classNames('filter__link', {
+            selected: filter === link.type,
+          })}
+          onClick={e => {
             e.preventDefault();
             onFilterChange(link.type);
           }}

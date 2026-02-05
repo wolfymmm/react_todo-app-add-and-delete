@@ -15,7 +15,12 @@ type Props = {
   isLoading?: boolean;
 };
 
-export const Todo: React.FC<Props> = ({ todo, onDelete, onToggle, isLoading = false }) => {
+export const Todo: React.FC<Props> = ({
+  todo,
+  onDelete,
+  onToggle,
+  isLoading = false,
+}) => {
   const handleCheckboxClick = () => {
     if (onToggle) {
       onToggle(todo.id, !todo.completed);

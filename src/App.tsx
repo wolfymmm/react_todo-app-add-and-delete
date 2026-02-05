@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react'; 
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { UserWarning } from './UserWarning';
 import { getTodos, addTodo, deleteTodo, USER_ID } from './api/todos';
 import { Todo } from './types/Todo';
@@ -44,12 +44,15 @@ export const App: React.FC = () => {
       clearTimeout(errorTimer.current);
       errorTimer.current = null;
     }
+
     setIsErrorHidden(true);
   };
 
   const focusInput = useCallback(() => {
     setTimeout(() => {
-      const input = document.querySelector<HTMLInputElement>('.todoapp__new-todo');
+      const input =
+        document.querySelector<HTMLInputElement>('.todoapp__new-todo');
+
       if (input && !input.disabled) {
         input.focus();
 
@@ -74,6 +77,7 @@ export const App: React.FC = () => {
     if (!title) {
       showError(ErrorMessage.EmptyTitle);
       focusInput();
+
       return;
     }
 
@@ -129,13 +133,9 @@ export const App: React.FC = () => {
   const handleToggle = (id: number, completed: boolean) => {
     setLoadingIds(prev => [...prev, id]);
 
-
     setTodos(prev =>
-      prev.map(todo =>
-        todo.id === id ? { ...todo, completed } : todo
-      ),
+      prev.map(todo => (todo.id === id ? { ...todo, completed } : todo)),
     );
-
 
     setLoadingIds(prev => prev.filter(todoId => todoId !== id));
   };
@@ -149,13 +149,14 @@ export const App: React.FC = () => {
       : todos.filter(todo => !todo.completed);
 
     const idsToUpdate = todosToUpdate.map(todo => todo.id);
+
     setLoadingIds(prev => [...prev, ...idsToUpdate]);
 
     setTodos(prev =>
       prev.map(todo => ({
         ...todo,
         completed: newCompletedState,
-      }))
+      })),
     );
 
     setTimeout(() => {
@@ -168,7 +169,9 @@ export const App: React.FC = () => {
       .filter(todo => todo.completed)
       .map(todo => todo.id);
 
-    if (completedIds.length === 0) return;
+    if (completedIds.length === 0) {
+      return;
+    }
 
     setLoadingIds(prev => [...prev, ...completedIds]);
     focusAfterOperation.current = true;
@@ -200,7 +203,9 @@ export const App: React.FC = () => {
   };
 
   useEffect(() => {
-    if (!USER_ID) return;
+    if (!USER_ID) {
+      return;
+    }
 
     getTodos(USER_ID)
       .then(setTodos)
@@ -227,14 +232,21 @@ export const App: React.FC = () => {
   const allTodos = tempTodo ? [...todos, tempTodo] : todos;
 
   const visibleTodos = allTodos.filter(todo => {
-    if (filter === FILTERS.active) return !todo.completed;
-    if (filter === FILTERS.completed) return todo.completed;
+    if (filter === FILTERS.active) {
+      return !todo.completed;
+    }
+
+    if (filter === FILTERS.completed) {
+      return todo.completed;
+    }
+
     return true;
   });
 
   const todosLeft = todos.filter(todo => !todo.completed).length;
   const completedTodosCount = todos.filter(todo => todo.completed).length;
-  const isAllCompleted = todos.length > 0 && todos.every(todo => todo.completed);
+  const isAllCompleted =
+    todos.length > 0 && todos.every(todo => todo.completed);
   const hasTodos = todos.length > 0;
   const hasCompletedTodos = completedTodosCount > 0;
 
